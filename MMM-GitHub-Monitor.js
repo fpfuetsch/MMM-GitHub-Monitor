@@ -1,6 +1,6 @@
-Module.register("MMM-GitHub-Monitor", {
+Module.register('MMM-GitHub-Monitor', {
   defaults: {
-    updateInterval: 1000 * 60 * 5,
+    updateInterval: 1000 * 5,
     repositories: [
       {
         owner: 'BrainConverter',
@@ -9,19 +9,19 @@ Module.register("MMM-GitHub-Monitor", {
     ]
   },
 
-  start: () => {
+  start: function () {
     Log.log('Starting module: ' + this.name);
-    this.update();
-    setInterval(this.update, this.config.updateInterval);
+    this.updateCycle();
+    setInterval(this.updateCycle, this.config.updateInterval);
   },
 
-  update: async () => {
+  updateCycle: async function () {
     this.ghData = [];
     await this.updateData();
     this.updateDom();
   },
 
-  updateData: async () => {
+  updateData: async function () {
     for (repo of this.config.repositories) {
       const res = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
       if (res.ok) {
@@ -34,7 +34,7 @@ Module.register("MMM-GitHub-Monitor", {
     }
   },
 
-  getDom: () => {
+  getDom: function () {
     let table = document.createElement('table');
 
     let head = document.createElement('tr');
