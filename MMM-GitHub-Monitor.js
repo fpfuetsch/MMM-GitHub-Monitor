@@ -9,23 +9,19 @@ Module.register("MMM-GitHub-Monitor", {
     ]
   },
 
-  start: function () {
+  start: () => {
     Log.log('Starting module: ' + this.name);
-    this.ghData = [];
-    this.scheduleUpdate();
+    this.update();
+    setInterval(this.update, this.config.updateInterval);
   },
 
-  scheduleUpdate: function () {
-    const update = async () => {
-      await this.updateData();
-      this.updateDom();
-    }
-    setInterval(update, this.config.updateInterval);
+  update: async () => {
+    this.ghData = [];
+    await this.updateData();
+    this.updateDom();
   },
 
-
-  updateData: async function () {
-    this.ghData = [];
+  updateData: async () => {
     for (repo of this.config.repositories) {
       const res = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
       if (res.ok) {
@@ -38,7 +34,7 @@ Module.register("MMM-GitHub-Monitor", {
     }
   },
 
-  getDom: function () {
+  getDom: () => {
     let table = document.createElement('table');
 
     let head = document.createElement('tr');
