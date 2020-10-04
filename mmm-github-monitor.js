@@ -1,34 +1,35 @@
 
-Module.register('mmm-github-monitor',{
-	// Default module config.
-	defaults: {
-		repositories: [
+Module.register('MMM-GitHub-Monitor', {
+  // Default module config.
+  defaults: {
+    repositories: [
       {
         owner: 'BrainConverter',
-        name: 'MMM-Github-Monitor'
+        name: 'MMM-GitHub-Monitor'
       },
     ]
   },
 
-  start: () => {
+  start: function () {
+    Log.log('Starting module: ' + this.name);
     this.scheduleUpdate();
   },
 
-  scheduleUpdate: () => {
-    setTimeout(async() => {
+  scheduleUpdate: function () {
+    setTimeout(async function () {
       Log.log('Updating repository data');
       await this.updateData();
       this.updateDom();
-		}, 1000 * 60 * 2);
+    }, 1000 * 60 * 2);
   },
 
-  updateData: async () => {
-    this.data = [];
-    for(repo of this.config.repositories) {
+  updateData: async function () {
+    this.ghData = [];
+    for (repo of this.config.repositories) {
       const res = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
       if (res.ok) {
         const json = await res.json();
-        this.data.push({
+        this.ghData.push({
           title: `${repo.owner}/${repo.name}`,
           stars: json.stargazers_count,
         })
@@ -36,8 +37,8 @@ Module.register('mmm-github-monitor',{
     }
   },
 
-	// Override dom generator.
-	getDom: () => {
+  // Override dom generator.
+  getDom: function () {
     let table = document.createElement('table');
 
     let head = document.createElement('tr');
@@ -49,9 +50,8 @@ Module.register('mmm-github-monitor',{
     head.append(headStar);
     table.append(head);
 
-    for(repo of this.data) {
+    this.ghData.forEach(function (repo) {
       let row = document.createElement('tr');
-
 
       let title = document.createElement('td');
       title.innerText = repo.title;
@@ -62,7 +62,7 @@ Module.register('mmm-github-monitor',{
       row.append(title);
       row.append(stars);
       table.append(row);
-    }
-		return table;
-	}
+    })
+    return table;
+  }
 });
