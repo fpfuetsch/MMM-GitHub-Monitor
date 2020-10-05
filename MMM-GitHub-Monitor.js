@@ -58,9 +58,11 @@ Module.register('MMM-GitHub-Monitor', {
 
       let stars = document.createElement('td');
       stars.innerHTML =  `<i class="fa fa-star"></i> ${repo.stars}`;
+      stars.style.textAlign = 'left';
 
       let forks = document.createElement('td');
       forks.innerHTML =  `<i class="fa fa-code-fork"></i> ${repo.forks}`;
+      forks.style.textAlign = 'left';
 
       row.append(title);
       row.append(stars);
