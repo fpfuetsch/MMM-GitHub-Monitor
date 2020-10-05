@@ -12,23 +12,21 @@ To use this module, add it to the modules array in the `config/config.js` file:
 modules: [
 	{
 		module: 'MMM-GitHub-Monitor',
-		position: 'top_left', // any possible region
-		// classes: 'small', // optional list of custom css classes
-		// header: 'GitHub-Stats', // optional header text
-		config: {
-      repositories: [ // list of GitHub repositories to monitor
-        {
-          owner: 'MichMich', // reposistory owner
-          name: 'MagicMirror', // repository name
+        position: 'top_left', // any possible region
+        config: {
+          repositories: [ // list of GitHub repositories to monitor
+            {
+              owner: 'MichMich', // reposistory owner
+              name: 'MagicMirror', // repository name
+            },
+            {
+              owner: 'BrainConverter',
+              name: 'MMM-GitHub-Monitor',
+            },
+          ],
+          sort: true, // sort repositories alphabetically (default: true)
+          updateInterval: 10000, // update interval in milliseconds (default: 10 min)
         },
-        {
-          owner: 'BrainConverter',
-          name: 'MMM-GitHub-Monitor',
-        },
-      ],
-      sort: true, // sort repositories alphabetically (default: true)
-			updateInterval: 10000, // update interval in milliseconds (default: 10 min)
-		},
 	},
 ]
 ```
