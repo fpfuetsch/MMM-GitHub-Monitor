@@ -13,22 +13,20 @@ modules: [
 	{
 		module: 'MMM-GitHub-Monitor',
 		position: 'top_left', // any possible region
-		// classes: 'small', // optional list of custom css classes
-		// header: 'GitHub-Stats', // optional header text
 		config: {
-      repositories: [ // list of GitHub repositories to monitor
-        {
-          owner: 'MichMich', // reposistory owner
-          name: 'MagicMirror', // repository name
-        },
-        {
-          owner: 'BrainConverter',
-          name: 'MMM-GitHub-Monitor',
-        },
-      ],
-      sort: true, // sort repositories alphabetically (default: true)
+			repositories: [ // list of GitHub repositories to monitor
+				{
+					owner: 'MichMich', // reposistory owner
+					name: 'MagicMirror', // repository name
+				},
+				{
+					owner: 'BrainConverter',
+					name: 'MMM-GitHub-Monitor',
+				},
+			],
+			sort: true, // sort repositories alphabetically (default: true)
 			updateInterval: 10000, // update interval in milliseconds (default: 10 min)
-		},
+        },
 	},
 ]
 ```
