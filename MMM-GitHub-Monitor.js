@@ -11,7 +11,10 @@ Module.register('MMM-GitHub-Monitor', {
   },
 
   getStyles: function() {
-    return ['font-awesome.css'];
+    return [
+      this.file('MMM-GitHub-Monitor.css'),
+      'font-awesome.css'
+    ];
   },
 
   start: function () {
@@ -45,6 +48,7 @@ Module.register('MMM-GitHub-Monitor', {
 
   getDom: function () {
     let table = document.createElement('table');
+    table.classList.add('gh-monitor');
 
     this.ghData.forEach(function (repo) {
       let row = document.createElement('tr');
