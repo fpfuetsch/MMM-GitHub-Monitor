@@ -1,12 +1,13 @@
 Module.register('MMM-GitHub-Monitor', {
   defaults: {
-    updateInterval: 1000 * 10,
+    updateInterval: 1000 * 60 * 10,
     repositories: [
       {
         owner: 'BrainConverter',
         name: 'MMM-GitHub-Monitor'
       },
-    ]
+    ],
+    sort: true,
   },
 
   getStyles: function() {
@@ -36,6 +37,9 @@ Module.register('MMM-GitHub-Monitor', {
           forks: json.forks_count,
         })
       }
+    }
+    if (this.config.sort) {
+      this.ghData.sort((r1, r2) => r1.title > r2.title);
     }
   },
 
