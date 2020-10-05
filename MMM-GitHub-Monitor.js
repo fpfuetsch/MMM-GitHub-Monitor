@@ -1,12 +1,16 @@
 Module.register('MMM-GitHub-Monitor', {
   defaults: {
-    updateInterval: 1000 * 5,
+    updateInterval: 1000 * 10,
     repositories: [
       {
         owner: 'BrainConverter',
         name: 'MMM-GitHub-Monitor'
       },
     ]
+  },
+
+  getStyles: function() {
+    return ['font-awesome.css'];
   },
 
   start: function () {
@@ -29,6 +33,7 @@ Module.register('MMM-GitHub-Monitor', {
         this.ghData.push({
           title: `${repo.owner}/${repo.name}`,
           stars: json.stargazers_count,
+          forks: json.forks_count,
         })
       }
     }
@@ -37,15 +42,6 @@ Module.register('MMM-GitHub-Monitor', {
   getDom: function () {
     let table = document.createElement('table');
 
-    let head = document.createElement('tr');
-    let headName = document.createElement('th');
-    headName.innerText = 'Name';
-    let headStar = document.createElement('th');
-    headStar.innerText = 'Stars';
-    head.append(headName);
-    head.append(headStar);
-    table.append(head);
-
     this.ghData.forEach(function (repo) {
       let row = document.createElement('tr');
 
@@ -53,10 +49,14 @@ Module.register('MMM-GitHub-Monitor', {
       title.innerText = repo.title;
 
       let stars = document.createElement('td');
-      stars.innerText = repo.stars;
+      stars.innerHTML =  `<i class="fa fa-star"></i> ${repo.stars}`;
+
+      let forks = document.createElement('td');
+      forks.innerHTML =  `<i class="fa fa-code-fork"></i> ${repo.forks}`;
 
       row.append(title);
       row.append(stars);
+      row.append(forks)
       table.append(row);
     })
     return table;
