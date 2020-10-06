@@ -2,6 +2,8 @@
 ## What?
 This module enables you to display certain information about your favourite GitHub Repositories on your MagicMirror² Mirror.
 
+![Screenshot](screenshot.png)
+
 ## How?
 ### Installation
   1. Navigate to the `/modules` folder of you MagicMirror²
