@@ -86,6 +86,7 @@ Module.register('MMM-GitHub-Monitor', {
 
     this.ghData.forEach(function (repo) {
       let basicRow = document.createElement('tr');
+      basicRow.style.fontWeight = 'bold';
 
       let title = document.createElement('td');
       title.innerText = repo.title;
