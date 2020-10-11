@@ -130,6 +130,7 @@ Module.register('MMM-GitHub-Monitor', {
       table.append(basicRow);
 
       if (repo.pulls) {
+        Log.log('state', this.state)
         const displayedPulls = [];
         for (let i = 0; i < repo.step; i++) {
           if (this.state[repo.id] + 1 < repo.pulls.length) {
