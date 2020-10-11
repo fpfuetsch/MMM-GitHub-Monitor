@@ -78,7 +78,6 @@ Module.register('MMM-GitHub-Monitor', {
             }
           });
           const resPulls = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
-          Log.log(resPulls)
           if (resPulls.ok) {
             let jsonPulls = await resPulls.json();
             if (repo.pulls.loadCount) {
@@ -108,7 +107,6 @@ Module.register('MMM-GitHub-Monitor', {
     table.classList.add('gh-monitor');
 
     this.ghData.forEach((repo) => {
-      Log.log(repo)
       let basicRow = document.createElement('tr');
       basicRow.style.fontWeight = 'bold';
       basicRow.style.paddingBottom = '0.5em';
@@ -130,7 +128,7 @@ Module.register('MMM-GitHub-Monitor', {
       table.append(basicRow);
 
       if (repo.pulls) {
-        Log.log(repo.step)
+        Log.log(this.state)
         const displayedPulls = [];
         for (let i = 0; i < repo.step; i++) {
           if (this.state[repo.id] + 1 < repo.pulls.length) {
