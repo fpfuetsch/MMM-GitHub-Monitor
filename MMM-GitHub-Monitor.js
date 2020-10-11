@@ -53,7 +53,7 @@ Module.register('MMM-GitHub-Monitor', {
           const pullsConfig = {
             state: repo.pulls.state || 'open',
             head: repo.pulls.head,
-            base: repo.pull.base,
+            base: repo.pulls.base,
             sort: repo.pulls.sort || 'created',
             direction: repo.pulls.direction || 'desc',
           }
@@ -65,7 +65,7 @@ Module.register('MMM-GitHub-Monitor', {
           });
           const resPulls = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
           if (resPulls.ok) {
-            const jsonPulls = await resPulls.json();
+            let jsonPulls = await resPulls.json();
             if (repo.pulls.topCount) {
               jsonPulls = jsonPulls.slice(0, repo.pulls.topCount);
             }
