@@ -91,7 +91,6 @@ Module.register('MMM-GitHub-Monitor', {
               })
             }
             repoData.step = Math.min(repo.pulls.displayCount, repo.pulls.length);
-            Log.log(repoData.step, + repoData.title)
             repoData.pulls = jsonPulls;
           }
         }
@@ -108,6 +107,7 @@ Module.register('MMM-GitHub-Monitor', {
     table.classList.add('gh-monitor');
 
     this.ghData.forEach(function (repo) {
+      Log.log(repo)
       let basicRow = document.createElement('tr');
       basicRow.style.fontWeight = 'bold';
       basicRow.style.paddingBottom = '0.5em';
