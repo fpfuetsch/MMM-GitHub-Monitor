@@ -107,7 +107,7 @@ Module.register('MMM-GitHub-Monitor', {
         repo.pulls.forEach(pull => {
           const pullRow = document.createElement('tr');
           const pullEntry = document.createElement('td');
-          pullEntry.rowSpan = 3;
+          pullEntry.colSpan = 3;
           pullEntry.innerText = `#${pull.number}: ${pull.title}`;
           pullRow.append(pullEntry);
           table.append(pullRow);
