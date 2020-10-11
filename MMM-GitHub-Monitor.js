@@ -4,13 +4,22 @@ Module.register('MMM-GitHub-Monitor', {
     repositories: [
       {
         owner: 'BrainConverter',
-        name: 'MMM-GitHub-Monitor'
+        name: 'MMM-GitHub-Monitor',
+        pulls: {
+          show: true,
+          state: 'open',
+          head: '',
+          base: 'main',
+          sort: 'created',
+          direction: 'desc',
+          topCount: 10
+        }
       },
     ],
     sort: true,
   },
 
-  getStyles: function() {
+  getStyles: function () {
     return [
       this.file('MMM-GitHub-Monitor.css'),
       'font-awesome.css'
@@ -31,14 +40,39 @@ Module.register('MMM-GitHub-Monitor', {
 
   updateData: async function () {
     for (repo of this.config.repositories) {
-      const res = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
-      if (res.ok) {
-        const json = await res.json();
-        this.ghData.push({
+      const resBase = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
+      if (resBase.ok) {
+        const jsonBase = await resBase.json();
+        const repoData = {
           title: `${repo.owner}/${repo.name}`,
-          stars: json.stargazers_count,
-          forks: json.forks_count,
-        })
+          stars: jsonBase.stargazers_count,
+          forks: jsonBase.forks_count,
+        }
+
+        if (repo.pulls && repo.pulls.show) {
+          const pullsConfig = {
+            state: repo.pulls.state || 'open',
+            head: repo.pulls.head,
+            base: repo.pull.base,
+            sort: repo.pulls.sort || 'created',
+            direction: repo.pulls.direction || 'desc',
+          }
+          let params = [];
+          Object.keys(pullsConfig).forEach(key => {
+            if (pullsConfig[key]) {
+              params.push(`${key}=${pullsConfig[key]}`)
+            }
+          });
+          const resPulls = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
+          if (resPulls.ok) {
+            const jsonPulls = await resPulls.json();
+            if (repo.pulls.topCount) {
+              jsonPulls = jsonPulls.slice(0, repo.pulls.topCount);
+            }
+            repoData.pulls = jsonPulls;
+          }
+        }
+        this.ghData.push(repoData)
       }
     }
     if (this.config.sort) {
@@ -57,16 +91,25 @@ Module.register('MMM-GitHub-Monitor', {
       title.innerText = repo.title;
 
       let stars = document.createElement('td');
-      stars.innerHTML =  `<i class="fa fa-star"></i> ${repo.stars}`;
+      stars.innerHTML = `<i class="fa fa-star"></i> ${repo.stars}`;
       stars.style.textAlign = 'left';
 
       let forks = document.createElement('td');
-      forks.innerHTML =  `<i class="fa fa-code-fork"></i> ${repo.forks}`;
+      forks.innerHTML = `<i class="fa fa-code-fork"></i> ${repo.forks}`;
       forks.style.textAlign = 'left';
-
       row.append(title);
       row.append(stars);
       row.append(forks)
+
+      if (repo.pulls) {
+        repo.pulls.forEach(pull => {
+          let pullEntry = document.createElement('td');
+          pullEntry.rowSpan = 3;
+          pullEntry.innerText = `#${pull.number}: ${pull.title}`;
+          row.append(pullEntry);
+        });
+      }
+
       table.append(row);
     })
     return table;
