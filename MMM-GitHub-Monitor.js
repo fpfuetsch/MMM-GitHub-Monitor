@@ -2,7 +2,7 @@ Module.register('MMM-GitHub-Monitor', {
   defaults: {
     updateInterval: 1000 * 60 * 10,
     renderInterval: 1000 * 5,
-    maxWidth: '500px',
+    width: '500px',
     repositories: [
       {
         owner: 'BrainConverter',
@@ -97,7 +97,8 @@ Module.register('MMM-GitHub-Monitor', {
 
   getDom: function () {
     let table = document.createElement('table');
-    table.style.maxWidth = this.config.maxWidth;
+    table.style.width = this.config.width;
+    table.style.maxWidth = this.config.width;
     table.classList.add('gh-monitor');
 
     this.ghData.forEach((repo) => {
