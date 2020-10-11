@@ -109,7 +109,7 @@ Module.register('MMM-GitHub-Monitor', {
           const pullEntry = document.createElement('td');
           pullEntry.rowSpan = 3;
           pullEntry.innerText = `#${pull.number}: ${pull.title}`;
-          pullEntry.append(pullEntry);
+          pullRow.append(pullEntry);
           table.append(pullRow);
         });
       }
