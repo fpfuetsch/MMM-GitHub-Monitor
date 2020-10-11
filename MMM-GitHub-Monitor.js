@@ -129,7 +129,7 @@ Module.register('MMM-GitHub-Monitor', {
 
       if (repo.pulls) {
         const displayedPulls = [];
-        Log.log(repo.title, repo.step)
+        console.log(repo.title, repo.step)
         for (let i = 0; i < repo.step; i++) {
           if (this.state[repo.id] + 1 < repo.pulls.length) {
             displayedPulls.push(repo.pulls[this.state[repo.id] + 1])
