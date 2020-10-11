@@ -2,13 +2,13 @@ Module.register('MMM-GitHub-Monitor', {
   defaults: {
     updateInterval: 1000 * 60 * 10,
     renderInterval: 1000 * 5,
-    width: '500px',
     repositories: [
       {
         owner: 'BrainConverter',
         name: 'MMM-GitHub-Monitor',
         pulls: {
           display: true,
+          maxTitleLength: 100,
           loadCount: 10,
           displayCount: 2,
           state: 'open',
@@ -83,6 +83,13 @@ Module.register('MMM-GitHub-Monitor', {
             if (repo.pulls.loadCount) {
               jsonPulls = jsonPulls.slice(0, repo.pulls.loadCount);
             }
+            if (repo.pulls.maxTitleLength) {
+              jsonPulls.forEach(pull => {
+                if (pull.title.length > repo.pulls.maxTitleLength) {
+                  pull.title = pull.title.substr(0, repo.pulls.maxTitleLength) + '...';
+                }
+              })
+            }
             repoData.step = Math.min(repo.pulls.displayCount, jsonPulls.length);
             repoData.pulls = jsonPulls;
           }
@@ -97,8 +104,6 @@ Module.register('MMM-GitHub-Monitor', {
 
   getDom: function () {
     let table = document.createElement('table');
-    table.style.width = this.config.width;
-    table.style.maxWidth = this.config.width;
     table.classList.add('gh-monitor');
 
     this.ghData.forEach((repo) => {
