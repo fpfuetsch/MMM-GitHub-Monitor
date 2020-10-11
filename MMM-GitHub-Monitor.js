@@ -12,7 +12,8 @@ Module.register('MMM-GitHub-Monitor', {
           base: 'main',
           sort: 'created',
           direction: 'desc',
-          topCount: 10
+          topCount: 10,
+          maxTitleLength: 100,
         }
       },
     ],
@@ -69,6 +70,11 @@ Module.register('MMM-GitHub-Monitor', {
             if (repo.pulls.topCount) {
               jsonPulls = jsonPulls.slice(0, repo.pulls.topCount);
             }
+            if (repo.pulls.maxTitleLength) {
+              jsonPulls.forEach(pull => {
+                pull.title = pull.title.substr(0, repo.pulls.maxTitleLength) + "...";
+              })
+            }
             repoData.pulls = jsonPulls;
           }
         }
@@ -87,6 +93,7 @@ Module.register('MMM-GitHub-Monitor', {
     this.ghData.forEach(function (repo) {
       let basicRow = document.createElement('tr');
       basicRow.style.fontWeight = 'bold';
+      basicRow.style.paddingBottom = '0.5em';
 
       let title = document.createElement('td');
       title.innerText = repo.title;
@@ -107,11 +114,10 @@ Module.register('MMM-GitHub-Monitor', {
       if (repo.pulls) {
         repo.pulls.forEach(pull => {
           const pullRow = document.createElement('tr');
-          pullRow.style.padding = '5px 0';
 
           const pullEntry = document.createElement('td');
           pullEntry.colSpan = 3;
-          pullEntry.innerText = `#${pull.number}: ${pull.title}`;
+          pullEntry.innerText = `#${pull.number} ${pull.title}`;
           pullRow.append(pullEntry);
           table.append(pullRow);
         });
