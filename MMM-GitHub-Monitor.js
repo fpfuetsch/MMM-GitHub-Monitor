@@ -11,7 +11,7 @@ Module.register('MMM-GitHub-Monitor', {
           maxTitleLength: 100,
           loadCount: 10,
           displayCount: 2,
-          state: 'open',
+          cycleState: 'open',
           head: '',
           base: 'main',
           sort: 'created',
@@ -31,16 +31,16 @@ Module.register('MMM-GitHub-Monitor', {
 
   start: function () {
     Log.log('Starting module: ' + this.name);
-    this.initState();
+    this.initCycleState();
     this.updateCycle();
     setInterval(this.updateCycle, this.config.updateInterval);
     setInterval(this.updateDom, this.config.renderInterval);
   },
 
-  initState: function () {
-    this.state = [];
+  initCycleState: function () {
+    this.cycleState = [];
     for (let id = 0; id < this.config.repositories.length; id++) {
-      this.state[id] = 0;
+      this.cycleState[id] = 0;
     }
   },
 
@@ -65,7 +65,7 @@ Module.register('MMM-GitHub-Monitor', {
 
         if (repo.pulls && repo.pulls.display) {
           const pullsConfig = {
-            state: repo.pulls.state || 'open',
+            cycleState: repo.pulls.cycleState || 'open',
             head: repo.pulls.head,
             base: repo.pulls.base,
             sort: repo.pulls.sort || 'created',
@@ -130,15 +130,15 @@ Module.register('MMM-GitHub-Monitor', {
       table.append(basicRow);
 
       if (repo.pulls) {
-        Log.log('state', this.state)
+        Log.log('cycleState', this.cycleState)
         const displayedPulls = [];
         for (let i = 0; i < repo.step; i++) {
-          if (this.state[repo.id] + 1 < repo.pulls.length) {
-            displayedPulls.push(repo.pulls[this.state[repo.id] + 1])
-            this.state[repo.id]++;
+          if (this.cycleState[repo.id] + 1 < repo.pulls.length) {
+            displayedPulls.push(repo.pulls[this.cycleState[repo.id] + 1])
+            this.cycleState[repo.id]++;
           } else {
             displayedPulls.push(repo.pulls[0])
-            this.state[repo.id] = 0;
+            this.cycleState[repo.id] = 0;
           }
         }
         displayedPulls.forEach(pull => {
