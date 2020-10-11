@@ -1,3 +1,7 @@
 .gh-monitor td:not(:last-child) {
   padding-right: 1em;
 }
+
+.gh-monitor td {
+  white-space: nowrap;
+}
