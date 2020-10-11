@@ -34,7 +34,7 @@ Module.register('MMM-GitHub-Monitor', {
     this.initState();
     this.updateCycle();
     setInterval(this.updateCycle, this.config.updateInterval);
-    setInterval(this.updateDom, this.config.renderInterval);
+    setInterval(() => this.updateDom, this.config.renderInterval);
   },
 
   initState: function () {
@@ -130,7 +130,7 @@ Module.register('MMM-GitHub-Monitor', {
       table.append(basicRow);
 
       if (repo.pulls) {
-        Log.log('state', this.state)
+        Log.log(repo.step)
         const displayedPulls = [];
         for (let i = 0; i < repo.step; i++) {
           if (this.state[repo.id] + 1 < repo.pulls.length) {
