@@ -78,6 +78,7 @@ Module.register('MMM-GitHub-Monitor', {
             }
           });
           const resPulls = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
+          Log.log(resPulls)
           if (resPulls.ok) {
             let jsonPulls = await resPulls.json();
             if (repo.pulls.loadCount) {
@@ -90,7 +91,7 @@ Module.register('MMM-GitHub-Monitor', {
                 }
               })
             }
-            repoData.step = Math.min(repo.pulls.displayCount, repo.pulls.length);
+            repoData.step = Math.min(repo.pulls.displayCount, jsonPulls.length);
             repoData.pulls = jsonPulls;
           }
         }
