@@ -11,7 +11,7 @@ Module.register('MMM-GitHub-Monitor', {
           maxTitleLength: 100,
           loadCount: 10,
           displayCount: 2,
-          cycleState: 'open',
+          state: 'open',
           head: '',
           base: 'main',
           sort: 'created',
@@ -31,16 +31,16 @@ Module.register('MMM-GitHub-Monitor', {
 
   start: function () {
     Log.log('Starting module: ' + this.name);
-    this.initCycleState();
+    this.initState();
     this.updateCycle();
     setInterval(this.updateCycle, this.config.updateInterval);
     setInterval(this.updateDom, this.config.renderInterval);
   },
 
-  initCycleState: function () {
-    this.cycleState = [];
+  initState: function () {
+    this.state = [];
     for (let id = 0; id < this.config.repositories.length; id++) {
-      this.cycleState[id] = 0;
+      this.state[id] = 0;
     }
   },
 
@@ -65,7 +65,7 @@ Module.register('MMM-GitHub-Monitor', {
 
         if (repo.pulls && repo.pulls.display) {
           const pullsConfig = {
-            cycleState: repo.pulls.cycleState || 'open',
+            state: repo.pulls.state || 'open',
             head: repo.pulls.head,
             base: repo.pulls.base,
             sort: repo.pulls.sort || 'created',
@@ -107,7 +107,7 @@ Module.register('MMM-GitHub-Monitor', {
     let table = document.createElement('table');
     table.classList.add('gh-monitor');
 
-    this.ghData.forEach(function (repo) {
+    this.ghData.forEach((repo) => {
       Log.log(repo)
       let basicRow = document.createElement('tr');
       basicRow.style.fontWeight = 'bold';
@@ -130,15 +130,15 @@ Module.register('MMM-GitHub-Monitor', {
       table.append(basicRow);
 
       if (repo.pulls) {
-        Log.log('cycleState', this.cycleState)
+        Log.log('state', this.state)
         const displayedPulls = [];
         for (let i = 0; i < repo.step; i++) {
-          if (this.cycleState[repo.id] + 1 < repo.pulls.length) {
-            displayedPulls.push(repo.pulls[this.cycleState[repo.id] + 1])
-            this.cycleState[repo.id]++;
+          if (this.state[repo.id] + 1 < repo.pulls.length) {
+            displayedPulls.push(repo.pulls[this.state[repo.id] + 1])
+            this.state[repo.id]++;
           } else {
             displayedPulls.push(repo.pulls[0])
-            this.cycleState[repo.id] = 0;
+            this.state[repo.id] = 0;
           }
         }
         displayedPulls.forEach(pull => {
