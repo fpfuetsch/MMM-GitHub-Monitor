@@ -116,8 +116,8 @@ Module.register('MMM-GitHub-Monitor', {
       if (repo.pulls) {
         repo.pulls.forEach(pull => {
           const pullRow = document.createElement('tr');
-          pullRow.style.paddingLeft = '1em';
           const pullEntry = document.createElement('td');
+          pullEntry.style.paddingLeft = '1em';
           pullEntry.colSpan = 3;
           pullEntry.innerText = `#${pull.number} ${pull.title}`;
           pullRow.append(pullEntry);
