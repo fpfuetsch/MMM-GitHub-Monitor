@@ -85,7 +85,7 @@ Module.register('MMM-GitHub-Monitor', {
     table.classList.add('gh-monitor');
 
     this.ghData.forEach(function (repo) {
-      let row = document.createElement('tr');
+      let basicRow = document.createElement('tr');
 
       let title = document.createElement('td');
       title.innerText = repo.title;
@@ -97,20 +97,22 @@ Module.register('MMM-GitHub-Monitor', {
       let forks = document.createElement('td');
       forks.innerHTML = `<i class="fa fa-code-fork"></i> ${repo.forks}`;
       forks.style.textAlign = 'left';
-      row.append(title);
-      row.append(stars);
-      row.append(forks)
+
+      basicRow.append(title);
+      basicRow.append(stars);
+      basicRow.append(forks)
+      table.append(basicRow);
 
       if (repo.pulls) {
         repo.pulls.forEach(pull => {
-          let pullEntry = document.createElement('td');
+          const pullRow = document.createElement('tr');
+          const pullEntry = document.createElement('td');
           pullEntry.rowSpan = 3;
           pullEntry.innerText = `#${pull.number}: ${pull.title}`;
-          row.append(pullEntry);
+          pullEntry.append(pullEntry);
+          table.append(pullRow);
         });
       }
-
-      table.append(row);
     })
     return table;
   }
