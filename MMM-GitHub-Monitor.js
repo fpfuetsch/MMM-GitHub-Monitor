@@ -98,7 +98,7 @@ Module.register('MMM-GitHub-Monitor', {
       }
     }
     if (this.config.sort) {
-      this.ghData.sort((r1, r2) => r1.title > r2.title);
+      this.ghData.sort((r1, r2) => r1.title.localeCompare(r2.title));
     }
   },
 
