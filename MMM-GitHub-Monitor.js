@@ -1,19 +1,21 @@
 Module.register('MMM-GitHub-Monitor', {
   defaults: {
     updateInterval: 1000 * 60 * 10,
+    renderInterval: 1000 * 5,
     repositories: [
       {
         owner: 'BrainConverter',
         name: 'MMM-GitHub-Monitor',
         pulls: {
-          show: true,
+          display: true,
+          maxTitleLength: 100,
+          loadCount: 10,
+          displayCount: 2,
           state: 'open',
           head: '',
           base: 'main',
           sort: 'created',
           direction: 'desc',
-          topCount: 10,
-          maxTitleLength: 100,
         }
       },
     ],
@@ -29,8 +31,17 @@ Module.register('MMM-GitHub-Monitor', {
 
   start: function () {
     Log.log('Starting module: ' + this.name);
+    this.initState();
     this.updateCycle();
     setInterval(this.updateCycle, this.config.updateInterval);
+    setInterval(this.updateDom, this.config.renderInterval);
+  },
+
+  initState: function () {
+    this.state = [];
+    for (let id = 0; id < this.config.repositories.length; id++) {
+      this.state[id] = 0;
+    }
   },
 
   updateCycle: async function () {
@@ -40,17 +51,19 @@ Module.register('MMM-GitHub-Monitor', {
   },
 
   updateData: async function () {
-    for (repo of this.config.repositories) {
+    for (let id = 0; id < this.config.repositories.length; id++) {
+      const repo = this.config.repositories[id];
       const resBase = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
       if (resBase.ok) {
         const jsonBase = await resBase.json();
         const repoData = {
+          id: id,
           title: `${repo.owner}/${repo.name}`,
           stars: jsonBase.stargazers_count,
           forks: jsonBase.forks_count,
         }
 
-        if (repo.pulls && repo.pulls.show) {
+        if (repo.pulls && repo.pulls.display) {
           const pullsConfig = {
             state: repo.pulls.state || 'open',
             head: repo.pulls.head,
@@ -67,16 +80,17 @@ Module.register('MMM-GitHub-Monitor', {
           const resPulls = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
           if (resPulls.ok) {
             let jsonPulls = await resPulls.json();
-            if (repo.pulls.topCount) {
-              jsonPulls = jsonPulls.slice(0, repo.pulls.topCount);
+            if (repo.pulls.loadCount) {
+              jsonPulls = jsonPulls.slice(0, repo.pulls.loadCount);
             }
             if (repo.pulls.maxTitleLength) {
               jsonPulls.forEach(pull => {
-                if(pull.title.length > repo.pulls.maxTitleLength) {
+                if (pull.title.length > repo.pulls.maxTitleLength) {
                   pull.title = pull.title.substr(0, repo.pulls.maxTitleLength) + '...';
                 }
               })
             }
+            repoData.step = Math.min(repo.displayCount, repo.pulls.length);
             repoData.pulls = jsonPulls;
           }
         }
@@ -114,7 +128,17 @@ Module.register('MMM-GitHub-Monitor', {
       table.append(basicRow);
 
       if (repo.pulls) {
-        repo.pulls.forEach(pull => {
+        const displayedPulls = [];
+        for (let i = 0; i < repo.step; i++) {
+          if (this.state[repo.id] + 1 < repo.pulls.length) {
+            displayedPulls.push(repo.pulls[this.state[repo.id] + 1])
+            this.state[repo.id]++;
+          } else {
+            displayedPulls.push(repo.pulls[0])
+            this.state[repo.id] = 0;
+          }
+        }
+        displayedPulls.forEach(pull => {
           const pullRow = document.createElement('tr');
           const pullEntry = document.createElement('td');
           pullEntry.style.paddingLeft = '1em';
