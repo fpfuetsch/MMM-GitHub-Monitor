@@ -72,7 +72,9 @@ Module.register('MMM-GitHub-Monitor', {
             }
             if (repo.pulls.maxTitleLength) {
               jsonPulls.forEach(pull => {
-                pull.title = pull.title.substr(0, repo.pulls.maxTitleLength) + "...";
+                if(pull.title.length > repo.pulls.maxTitleLength) {
+                  pull.title = pull.title.substr(0, repo.pulls.maxTitleLength) + '...';
+                }
               })
             }
             repoData.pulls = jsonPulls;
@@ -114,7 +116,7 @@ Module.register('MMM-GitHub-Monitor', {
       if (repo.pulls) {
         repo.pulls.forEach(pull => {
           const pullRow = document.createElement('tr');
-
+          pullRow.style.paddingLeft = '1em';
           const pullEntry = document.createElement('td');
           pullEntry.colSpan = 3;
           pullEntry.innerText = `#${pull.number} ${pull.title}`;
