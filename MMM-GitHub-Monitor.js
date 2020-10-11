@@ -2,13 +2,13 @@ Module.register('MMM-GitHub-Monitor', {
   defaults: {
     updateInterval: 1000 * 60 * 10,
     renderInterval: 1000 * 5,
+    maxPullRequestTitleLength: 100,
     repositories: [
       {
         owner: 'BrainConverter',
         name: 'MMM-GitHub-Monitor',
         pulls: {
           display: true,
-          maxTitleLength: 100,
           loadCount: 10,
           displayCount: 2,
           state: 'open',
@@ -83,10 +83,10 @@ Module.register('MMM-GitHub-Monitor', {
             if (repo.pulls.loadCount) {
               jsonPulls = jsonPulls.slice(0, repo.pulls.loadCount);
             }
-            if (repo.pulls.maxTitleLength) {
+            if (repo.maxPullRequestTitleLength) {
               jsonPulls.forEach(pull => {
-                if (pull.title.length > repo.pulls.maxTitleLength) {
-                  pull.title = pull.title.substr(0, repo.pulls.maxTitleLength) + '...';
+                if (pull.title.length > repo.pulls.maxPullRequestTitleLength) {
+                  pull.title = pull.title.substr(0, repo.pulls.maxPullRequestTitleLength) + '...';
                 }
               })
             }
