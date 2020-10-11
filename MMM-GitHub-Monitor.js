@@ -2,7 +2,7 @@ Module.register('MMM-GitHub-Monitor', {
   defaults: {
     updateInterval: 1000 * 60 * 10,
     renderInterval: 1000 * 5,
-    maxWidth: '500px'
+    maxWidth: '500px',
     repositories: [
       {
         owner: 'BrainConverter',
