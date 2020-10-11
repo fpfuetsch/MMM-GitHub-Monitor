@@ -34,7 +34,7 @@ Module.register('MMM-GitHub-Monitor', {
     this.initState();
     this.updateCycle();
     setInterval(this.updateCycle, this.config.updateInterval);
-    setInterval(() => this.updateDom, this.config.renderInterval);
+    setInterval(() => this.updateDom(), this.config.renderInterval);
   },
 
   initState: function () {
