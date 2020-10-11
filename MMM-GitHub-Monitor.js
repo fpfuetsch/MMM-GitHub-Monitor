@@ -90,7 +90,7 @@ Module.register('MMM-GitHub-Monitor', {
                 }
               })
             }
-            repoData.step = Math.min(repo.displayCount, repo.pulls.length);
+            repoData.step = Math.min(repo.pulls.displayCount, repo.pulls.length);
             repoData.pulls = jsonPulls;
           }
         }
