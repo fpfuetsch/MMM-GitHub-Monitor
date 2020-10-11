@@ -85,8 +85,8 @@ Module.register('MMM-GitHub-Monitor', {
             }
             if (repo.maxPullRequestTitleLength) {
               jsonPulls.forEach(pull => {
-                if (pull.title.length > repo.pulls.maxPullRequestTitleLength) {
-                  pull.title = pull.title.substr(0, repo.pulls.maxPullRequestTitleLength) + '...';
+                if (pull.title.length > repo.maxPullRequestTitleLength) {
+                  pull.title = pull.title.substr(0, repo.maxPullRequestTitleLength) + '...';
                 }
               })
             }
