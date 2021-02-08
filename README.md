@@ -33,4 +33,4 @@ modules: [
 ]
 ```
 ### Update
-Navigate to the folder of the this module in the `/modules` folder and get the latest version using the command `git pull`.
+Navigate to the folder of the module in the `/modules` folder and get the latest version using the command `git pull`.
