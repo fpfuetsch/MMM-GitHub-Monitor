@@ -7,7 +7,7 @@ This module enables you to display certain information about your favourite GitH
 ## How?
 ### Installation
   1. Navigate to the `/modules` folder of you MagicMirror²
-  2. Clone this repository using the following command: `git clone https://github.com/BrainConverter/MMM-GitHub-Monitor.git`
+  2. Clone this repository using the following command: `git clone https://github.com/fpfuetsch/MMM-GitHub-Monitor.git`
 ### Configuration
 To use this module, add it to the modules array in the `config/config.js` file:
 ```javascript
@@ -20,9 +20,17 @@ modules: [
 				{
 					owner: 'MichMich', // reposistory owner
 					name: 'MagicMirror', // repository name
+					pulls: {
+						display: true, // show recent pull requests
+						loadCount: 10, // cycle through 10 latest pull requests
+						displayCount: 2, // show 2 pull requests at a time
+						state: 'open', // show only open pull requests
+						sort: 'created', // sort by creation date
+						direction: 'desc', // sort in descending order
+					}
 				},
 				{
-					owner: 'BrainConverter',
+					owner: 'fpfuetsch',
 					name: 'MMM-GitHub-Monitor',
 				},
 			],

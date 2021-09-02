@@ -5,7 +5,7 @@ Module.register('MMM-GitHub-Monitor', {
     maxPullRequestTitleLength: 100,
     repositories: [
       {
-        owner: 'BrainConverter',
+        owner: 'fpfuetsch',
         name: 'MMM-GitHub-Monitor',
         pulls: {
           display: true,
