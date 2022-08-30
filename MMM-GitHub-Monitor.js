@@ -20,6 +20,7 @@ Module.register('MMM-GitHub-Monitor', {
       },
     ],
     sort: true,
+    baseURL: 'https://api.github.com',
   },
 
   getStyles: function () {
@@ -53,7 +54,7 @@ Module.register('MMM-GitHub-Monitor', {
   updateData: async function () {
     for (let id = 0; id < this.config.repositories.length; id++) {
       const repo = this.config.repositories[id];
-      const resBase = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}`)
+      const resBase = await fetch(`${this.config.baseURL}/repos/${repo.owner}/${repo.name}`)
       if (resBase.ok) {
         const jsonBase = await resBase.json();
         const repoData = {
@@ -77,7 +78,7 @@ Module.register('MMM-GitHub-Monitor', {
               params.push(`${key}=${pullsConfig[key]}`)
             }
           });
-          const resPulls = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
+          const resPulls = await fetch(`${this.config.baseURL}/repos/${repo.owner}/${repo.name}/pulls?${params.join('&')}`)
           if (resPulls.ok) {
             let jsonPulls = await resPulls.json();
             if (repo.pulls.loadCount) {
