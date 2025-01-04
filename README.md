@@ -37,7 +37,7 @@ modules: [
 			sort: true, // sort repositories alphabetically (default: true)
 			updateInterval: 10000, // update interval in milliseconds (default: 10 min)
 			baseURL: 'https://YOUR_GITHUB_URL/api/v3', // Optional for non-public githubs
-        },
+    },
 	},
 ]
 ```
